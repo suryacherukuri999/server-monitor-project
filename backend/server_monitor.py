@@ -10,6 +10,7 @@ import concurrent.futures
 from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from pytz import timezone
 
 # Import the Config class from config.py
 from config import Config
@@ -24,7 +25,13 @@ load_dotenv()
 # Initialize Flask + CORS
 #######################################
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={
+    r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 #######################################
 # Ping-based host check
@@ -83,7 +90,8 @@ def send_alert(server_name, status):
         return
 
     try:
-        msg = MIMEText(f"Server {server_name} is {status} as of {datetime.now()}")
+        current_time = datetime.now().astimezone(timezone('America/Chicago'))
+        msg = MIMEText(f"Server {server_name} is {status} as of {current_time.strftime('%Y-%m-%d %I:%M:%S %p CST')}")
         msg['Subject'] = f"SERVER ALERT: {server_name}"
         msg['From'] = email_user
         msg['To'] = admin_email

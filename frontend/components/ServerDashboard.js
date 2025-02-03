@@ -38,7 +38,7 @@ const ServerDashboard = () => {
 
   useEffect(() => {
     checkServers();
-    const interval = setInterval(checkServers, 30000);
+    const interval = setInterval(checkServers, 3600000);
     return () => clearInterval(interval);
   }, []);
 
