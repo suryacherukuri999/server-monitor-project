@@ -26,7 +26,8 @@ const ServerDashboard = () => {
       console.log('Received data:', data); // Debug log - check your browser console
       
       setServerStatus(data || {});  // Ensure we set an empty object if data is null
-      setLastChecked(new Date().toISOString());
+      const curr_time = new Date().toLocaleString();
+      setLastChecked(curr_time);
       setError(null);
     } catch (error) {
       console.error('Error fetching status:', error);
@@ -35,7 +36,7 @@ const ServerDashboard = () => {
       setLoading(false);
     }
   };
-
+//3600000
   useEffect(() => {
     checkServers();
     const interval = setInterval(checkServers, 3600000);
@@ -61,7 +62,7 @@ const ServerDashboard = () => {
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-2xl font-bold">Server Status Dashboard</h1>
         <div className="text-sm text-gray-500">
-          Last checked: {lastChecked ? new Date(lastChecked).toLocaleString() : 'Never'}
+          Last checked: {lastChecked}
         </div>
       </div>
 
